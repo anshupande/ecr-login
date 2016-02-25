@@ -2,13 +2,15 @@ package main
 
 import (
 	"encoding/base64"
-	// "github.com/rlister/ecr-login/Godeps/_workspace/src/github.com/aws/aws-sdk-go/aws"
-	"github.com/rlister/ecr-login/Godeps/_workspace/src/github.com/aws/aws-sdk-go/aws/session"
-	"github.com/rlister/ecr-login/Godeps/_workspace/src/github.com/aws/aws-sdk-go/service/ecr"
+
 	"os"
 	"strings"
 	"text/template"
 	"time"
+
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/ecr"
 )
 
 type Auth struct {
@@ -48,16 +50,24 @@ func getTemplate() *template.Template {
 }
 
 func main() {
+	var registryIds []*string
+
+	registries, exists := os.LookupEnv("REGISTRIES")
+
+	if exists {
+		for _, registry := range strings.Split(registries, ",") {
+			registryIds = append(registryIds, aws.String(registry))
+		}
+	}
+
 	svc := ecr.New(session.New())
 
-	// this would be how to get tokens for multiple registries
-	// params := &ecr.GetAuthorizationTokenInput{
-	// 	RegistryIds: []*string{
-	// 		aws.String("123"),
-	// 		aws.String("456"),
-	// 	},
-	// }
-	resp, err := svc.GetAuthorizationToken(nil)
+	// get tokens for multiple registries
+	params := &ecr.GetAuthorizationTokenInput{
+		RegistryIds: registryIds,
+	}
+
+	resp, err := svc.GetAuthorizationToken(params)
 	check(err)
 
 	// fields to send to template
