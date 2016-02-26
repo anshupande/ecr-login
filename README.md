@@ -41,7 +41,7 @@ $ TEMPLATE=templates/config.tmpl ./ecr-login
 In addition to the standard AWS Go SDK environment variables such as AWS_ACCESS_KEY, AWS_REGION, and AWS_SECRET_KEY.  The REGISTRIES variable can be used to specify a non-default registry or multiple comma delimited ECR registries.  When run through a Docker container, this can be especially useful for obtaining credentials on Mesos slaves.
 
 ```
-docker run --name ecr-login -e "TEMPLATE=templates/dockercfg.tmpl" -e "AWS_REGION=us-east-1" -e "REGISTRIES=012345678901" behance/ecr-login
+$ docker run --name ecr-login -e "TEMPLATE=templates/dockercfg.tmpl" -e "AWS_REGION=us-east-1" -e "REGISTRIES=012345678901" behance/ecr-login
 ```
 
 ## Systemd example
