@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/base64"
 
+	"fmt"
 	"os"
 	"strings"
 	"text/template"
@@ -24,7 +25,8 @@ type Auth struct {
 // error handler
 func check(e error) {
 	if e != nil {
-		panic(e.Error())
+		fmt.Fprintf(os.Stderr, "Error: %v\n", e)
+		os.Exit(1)
 	}
 }
 
