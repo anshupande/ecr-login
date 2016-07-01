@@ -11,6 +11,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ecr"
+	
+	"log"
 )
 
 type Auth struct {
@@ -50,6 +52,11 @@ func getTemplate() *template.Template {
 }
 
 func main() {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Fatalf("ecr-login error: %v\n",r)
+		}
+	}()
 	var registryIds []*string
 
 	registries, exists := os.LookupEnv("REGISTRIES")
