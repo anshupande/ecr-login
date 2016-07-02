@@ -59,8 +59,8 @@ dev:
 	fi
 
 # run a shell in the docker dev environment, mounting this directory and establishing bash_history in the container instance
-run-dev:
+run-dev: dev
 	# save bash history in-between runs...
-	if [ ! -f ~/.bash_history-ecr-login ]; then touch ~/.bash_history-ecr-login; fi
+	@if [ ! -f ~/.bash_history-ecr-login ]; then touch ~/.bash_history-ecr-login; fi
 	# mount the current directory into the dev build
 	docker run -i --rm --net host -v ~/.bash_history-ecr-login:/root/.bash_history -v `pwd`:/go/src/github.com/behance/ecr-login -w /go/src/github.com/behance/ecr-login -t behance/ecr-login:dev bash
