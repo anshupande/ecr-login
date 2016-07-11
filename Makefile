@@ -40,7 +40,6 @@ build-container: compile
 	else \
 		echo "You're in a docker container. Leave to run docker" ;\
 	fi
-	
 
 upload-current:
 	make build-container
@@ -60,7 +59,12 @@ dev:
 
 # run a shell in the docker dev environment, mounting this directory and establishing bash_history in the container instance
 run-dev: dev
-	# save bash history in-between runs...
+#       save bash history in-between runs...
 	@if [ ! -f ~/.bash_history-ecr-login ]; then touch ~/.bash_history-ecr-login; fi
-	# mount the current directory into the dev build
+#       mount the current directory into the dev build
 	docker run -i --rm --net host -v ~/.bash_history-ecr-login:/root/.bash_history -v `pwd`:/go/src/github.com/behance/ecr-login -w /go/src/github.com/behance/ecr-login -t behance/ecr-login:dev bash
+
+# use the built in (to alpine) ca-certificates and update-ca-certificates
+certificates: dev
+	docker run -i --rm  -v ~/.bash_history-ecr-login:/root/.bash_history -v `pwd`:/go/src/github.com/behance/ecr-login -w /go/src/github.com/behance/ecr-login -t behance/ecr-login:dev bash -c 'update-ca-certificates && cp /etc/ssl/certs/ca-certificates.crt certs/'
+
