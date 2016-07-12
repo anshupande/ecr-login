@@ -66,5 +66,5 @@ run-dev: dev
 
 # use the built in (to alpine) ca-certificates and update-ca-certificates
 certificates: dev
-	docker run -i --rm  -v ~/.bash_history-ecr-login:/root/.bash_history -v `pwd`:/go/src/github.com/behance/ecr-login -w /go/src/github.com/behance/ecr-login -t behance/ecr-login:dev bash -c 'update-ca-certificates && cp /etc/ssl/certs/ca-certificates.crt certs/'
+	docker run -i --rm  -v ~/.bash_history-ecr-login:/root/.bash_history -v `pwd`:/go/src/github.com/behance/ecr-login -w /go/src/github.com/behance/ecr-login behance/ecr-login:dev bash -c 'update-ca-certificates && cp /etc/ssl/certs/ca-certificates.crt certs/'
 
