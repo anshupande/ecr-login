@@ -36,15 +36,15 @@ build-container: compile
 	@echo "Building ecr-login container ..."
 	@grep -q docker /proc/1/cgroup ; \
 	if [ $$? -ne 0 ]; then \
-		docker build --tag behance/ecr-login:`git rev-parse HEAD` .; \
+		docker build --tag behance/ecr-login:`git rev-parse HEAD`_`date +%Y%m%d` .; \
 	else \
 		echo "You're in a docker container. Leave to run docker" ;\
 	fi
 
 upload-current:
 	make build-container
-	docker push behance/ecr-login:`git rev-parse HEAD`
-	docker tag behance/ecr-login:`git rev-parse HEAD` behance/ecr-login:latest
+	docker push behance/ecr-login:`git rev-parse HEAD`_`date +%Y%m%d`
+	docker tag behance/ecr-login:`git rev-parse HEAD`_`date +%Y%m%d` behance/ecr-login:latest
 	docker push behance/ecr-login:latest
 
 build: install-deps compile
