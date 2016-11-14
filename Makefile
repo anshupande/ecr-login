@@ -29,7 +29,7 @@ compile: dev
 	@grep -q docker /proc/1/cgroup ; \
 	if [ $$? -eq 0 ]; then go build -a -installsuffix cgo ecr-login.go ; \
 	else \
-		docker run -i --rm --net host -v ~/.bash_history-ecr-login:/root/.bash_history -v `pwd`:/go/src/github.com/behance/ecr-login -w /go/src/github.com/behance/ecr-login -e version=0.0.1  -e CGO_ENABLED=0 -e GOOS=linux behance/ecr-login:dev go build -a -installsuffix cgo ecr-login.go ; \
+	docker run -i --rm --net host -v ~/.bash_history-ecr-login:/root/.bash_history -v `pwd`:/go/src/github.com/adobe-platform/ecr-login -w /go/src/github.com/adobe-platform/ecr-login -e version=0.0.1  -e CGO_ENABLED=1 -e GOOS=linux behance/ecr-login:dev go build -a -installsuffix cgo ecr-login.go ; \
         fi
 
 build-container: compile
@@ -43,9 +43,9 @@ build-container: compile
 
 upload-current:
 	make build-container
-	docker push behance/ecr-login:`git rev-parse HEAD`_`date +%Y%m%d`
+	#docker push behance/ecr-login:`git rev-parse HEAD`_`date +%Y%m%d`
 	docker tag behance/ecr-login:`git rev-parse HEAD`_`date +%Y%m%d` behance/ecr-login:latest
-	docker push behance/ecr-login:latest
+	#docker push behance/ecr-login:latest
 
 build: install-deps compile
 
@@ -62,9 +62,9 @@ run-dev: dev
 #       save bash history in-between runs...
 	@if [ ! -f ~/.bash_history-ecr-login ]; then touch ~/.bash_history-ecr-login; fi
 #       mount the current directory into the dev build
-	docker run -i --rm --net host -v ~/.bash_history-ecr-login:/root/.bash_history -v `pwd`:/go/src/github.com/behance/ecr-login -w /go/src/github.com/behance/ecr-login -t behance/ecr-login:dev bash
+	docker run -i --rm --net host -v ~/.bash_history-ecr-login:/root/.bash_history -v `pwd`:/go/src/github.com/adobe-platform/ecr-login -w /go/src/github.com/adobe-platform/ecr-login -t behance/ecr-login:dev bash
 
 # use the built in (to alpine) ca-certificates and update-ca-certificates
 certificates: dev
-	docker run -i --rm  -v ~/.bash_history-ecr-login:/root/.bash_history -v `pwd`:/go/src/github.com/behance/ecr-login -w /go/src/github.com/behance/ecr-login behance/ecr-login:dev bash -c 'update-ca-certificates && cp /etc/ssl/certs/ca-certificates.crt certs/'
+	docker run -i --rm  -v ~/.bash_history-ecr-login:/root/.bash_history -v `pwd`:/go/src/github.com/adobe-platform/ecr-login -w /go/src/github.com/adobe-platform/ecr-login behance/ecr-login:dev bash -c 'update-ca-certificates && cp /etc/ssl/certs/ca-certificates.crt certs/'
 

@@ -2,7 +2,7 @@ FROM       golang:1.6.2-alpine
 MAINTAINER BehanceRE <qa-behance@adobe.com>
 
 # install runtime scripts
-ADD . $GOPATH/src/github.com/behance/ecr-login
+ADD . $GOPATH/src/github.com/adobe-platform/ecr-login
 
 
 RUN apk update && \
@@ -14,7 +14,7 @@ RUN apk update && \
       git \
     && rm -rf /var/cache/apk/* 
  
-WORKDIR $GOPATH/src/github.com/behance/ecr-login
+WORKDIR $GOPATH/src/github.com/adobe-platform/ecr-login
 
 RUN  make build 
  
